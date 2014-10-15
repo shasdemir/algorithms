@@ -28,3 +28,17 @@ def rec_russian(a, b):
     if a == 0: return 0
     if a % 2 == 0: return rec_russian(a/2, b) * 2
     return rec_russian((a-1)/2, b) * 2
+
+
+def create_tour(nodes):
+    """Write a function, `create_tour` that takes as input a list of nodes and outputs a list of tuples representing
+    edges between nodes that have an Eulerian tour. """
+
+    # I'll just make a circle
+    circle = []
+
+    for node_no in range(len(nodes)-1):
+        circle.append((nodes[node_no], nodes[node_no+1]))
+    circle.append((nodes[-1], nodes[0]))
+
+    return circle
