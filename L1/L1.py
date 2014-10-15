@@ -23,3 +23,8 @@ def time(n):
     steps = 3 + 2 * (n / 5 + (n % 5 != 0))
     return steps
 
+
+def rec_russian(a, b):
+    if a == 0: return 0
+    if a % 2 == 0: return rec_russian(a/2, b) * 2
+    return rec_russian((a-1)/2, b) * 2
