@@ -42,3 +42,57 @@ def create_tour(nodes):
     circle.append((nodes[-1], nodes[0]))
 
     return circle
+
+
+def count(n):
+    """ How many ops for clique(n) """
+
+    return ((n**2) / 2.) + (n/2.) + 2
+
+
+def find_eulerian_tour(graph):
+    def find_accessible_neighbors(edge_list, node):
+        nbors = set()
+        for link in edge_list:
+            if link[0] == node:
+                nbors.add(link[1])
+            elif link[1] == node:
+                nbors.add(link[0])
+        return nbors
+
+    # only visit a node if you can get out, unless it is the last move
+    def decide_the_next_move(edge_list, position):
+        """ return the link taken """
+
+        if len(edge_list) == 1:
+            return edge_list[-1]
+        else:
+            for link in edge_list:
+                if position in link:
+                    other = link[0] if position == link[1] else link[1]
+                    if len(find_accessible_neighbors(edge_list, other)) > 1:
+                        return link
+
+    new_point = graph[0][0]
+    path = [new_point]
+    while graph:
+        edge_taken = decide_the_next_move(edge_list=graph, position=new_point)
+
+        new_point = edge_taken[1] if edge_taken[0] == new_point else edge_taken[0]
+        path.append(new_point)
+
+        for k in range(len(graph)):
+            if graph[k] == edge_taken:
+                graph.pop(k)
+            break
+
+    return path
+
+
+
+
+
+
+
+
+
