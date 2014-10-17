@@ -22,3 +22,10 @@ def new_ring(n):
 
     return ring
 
+
+def count_nodes(graph):
+    return len(graph.keys())
+
+
+def count_links(graph):
+    return sum([len(graph[node]) for node in graph]) / 2
