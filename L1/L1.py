@@ -50,7 +50,7 @@ def count(n):
     return ((n**2) / 2.) + (n/2.) + 2
 
 
-def find_eulerian_tour(graph):
+def find_eulerian_tour_wrong(graph):
     def find_accessible_neighbors(edge_list, node):
         nbors = set()
         for link in edge_list:
@@ -89,10 +89,65 @@ def find_eulerian_tour(graph):
     return path
 
 
+def is_eulerian_tour(edge_list, path):
+    """ Check if path is an eulerian tour through the edge_list. """
+
+    # checks:
+    # 1. each successive point is accessible
+    # 3. all links are used, no extra link made up
+    # 4. we end up where we began
+
+    if path[0] != path[-1]:  # 4:
+        return False
+
+    current_edge_list = []
+    for edge in edge_list:
+        current_edge_list.append(edge)
+
+    for k in range(len(path)-1):
+        if (path[k], path[k+1]) not in current_edge_list and (path[k+1], path[k]) not in current_edge_list:
+            return False
+        else:
+
+            for i in range(len(edge_list)):
+                if current_edge_list[i] == (path[k], path[k+1]) or current_edge_list[i] == (path[k+1], path[k]):
+                    current_edge_list.pop(i)
+                    break
+
+    return not current_edge_list
 
 
+def find_eulerian_tour(edge_list):
+    """ Try random paths until an Eulerian path is found. """
 
+    import random
 
+    found = False
+    while not found:
+        current_node = edge_list[0][0]
+        path = [current_node]
 
+        remaining_edges = []
+        for edge in edge_list:
+            remaining_edges.append(edge)
 
+        while remaining_edges:
+            possible_edges = [edge for edge in remaining_edges if current_node in edge]
+
+            if possible_edges:
+                edge_taken = random.choice(possible_edges)
+            else:
+                break
+
+            path.append(edge_taken[0] if edge_taken[1] == current_node else edge_taken[1])
+
+            current_node = path[-1]
+
+            for k in range(len(remaining_edges)):
+                if remaining_edges[k] == edge_taken:
+                    remaining_edges.pop(k)
+                    break
+
+        if is_eulerian_tour(edge_list, path):
+            return path
 
