@@ -29,3 +29,7 @@ def count_nodes(graph):
 
 def count_links(graph):
     return sum([len(graph[node]) for node in graph]) / 2
+
+
+def clique(n):
+    return (n * (n - 1)) / 2.
