@@ -33,3 +33,18 @@ def count_links(graph):
 
 def clique(n):
     return (n * (n - 1)) / 2.
+
+
+def create_combo_lock(node_list):
+    graph = {}
+    center = node_list[0]
+
+    # make link from center to all others
+    for node in node_list[1:]:
+        make_link(graph, center, node)
+
+    # link the chain
+    for k in range(len(node_list)-1):
+        make_link(graph, node_list[k], node_list[k+1])
+
+    return graph
