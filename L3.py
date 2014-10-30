@@ -51,7 +51,7 @@ def list_component_sizes(G):
     marked = {}
     for node in G:
         if node not in marked:
-            print "Component containing" + str(node) + " " + mark_component(G, node, marked)
+            print "Component containing " + str(node) + ": " + str(mark_component(G, node, marked))
 
 
 def find_components_G():
@@ -62,3 +62,10 @@ def find_components_G():
         make_link(G, x, y)
 
     list_component_sizes(G)
+
+
+def check_connection(G, v1, v2):
+    marked = {}
+    mark_component(G, v1, marked)
+
+    return v2 in marked
