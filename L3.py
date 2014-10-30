@@ -54,18 +54,29 @@ def list_component_sizes(G):
             print "Component containing " + str(node) + ": " + str(mark_component(G, node, marked))
 
 
-def find_components_G():
-    connections = [('a', 'g'), ('a', 'd'), ('d', 'g'), ('g', 'c'), ('b', 'f'), ('f', 'e'), ('e', 'h')]
-
-    G = {}
-    for (x, y) in connections:
-        make_link(G, x, y)
-
-    list_component_sizes(G)
-
-
 def check_connection(G, v1, v2):
     marked = {}
     mark_component(G, v1, marked)
 
     return v2 in marked
+
+
+def path(G, v1, v2):
+    distance_from_start = {}
+    path_from_start = {}
+
+    open_list = [v1]
+    distance_from_start[v1] = 0
+    path_from_start[v1] = [v1]
+
+    while open_list:
+        current = open_list[0]  # bfs
+        open_list.pop(0)
+
+        for neighbor in G[current]:
+            if neighbor not in distance_from_start:
+                distance_from_start[neighbor] = distance_from_start[current] + 1
+                if neighbor == v2:
+                    return distance_from_start[v2]
+                open_list.append(neighbor)
+    return False
