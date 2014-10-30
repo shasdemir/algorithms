@@ -38,4 +38,27 @@ def cc_G():
     print total / len(G)
 
 
+def mark_component(G, node, marked):
+    marked[node] = True
+    total_marked = 1
+    for neighbor in G[node]:
+        if neighbor not in marked:
+            total_marked += mark_component(G, neighbor, marked)
+    return total_marked
 
+
+def list_component_sizes(G):
+    marked = {}
+    for node in G:
+        if node not in marked:
+            print "Component containing" + str(node) + " " + mark_component(G, node, marked)
+
+
+def find_components_G():
+    connections = [('a', 'g'), ('a', 'd'), ('d', 'g'), ('g', 'c'), ('b', 'f'), ('f', 'e'), ('e', 'h')]
+
+    G = {}
+    for (x, y) in connections:
+        make_link(G, x, y)
+
+    list_component_sizes(G)
