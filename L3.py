@@ -94,3 +94,20 @@ def path(G, v1, v2):
 def centrality(G, v):
     path_lengths = [len(path(G, v, other))-1 for other in G if other != v]
     return sum(path_lengths) / (len(path_lengths)-1.)
+
+
+def count_connected_components(G):
+    n_components = 0
+    marked = {}
+    for node in G:
+        if node not in marked:
+            mark_component_nr(G, node, marked)
+            n_components += 1
+    return n_components
+
+
+#def is_bridge_edge(G, edge):
+    """ Given a connected graph G and edge = (v1, v2) in G, return if G is a bridge edge. """
+
+    # strategy: remove edge from the graph, and count the number of connected components. If 2, edge was a bridge edge.
+    # in either case, put edge back into the graph.
