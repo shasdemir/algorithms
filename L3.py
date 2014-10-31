@@ -47,6 +47,18 @@ def mark_component(G, node, marked):
     return total_marked
 
 
+def mark_component_nr(G, node, marked):
+    marked[node] = True
+    open_list = [node]
+
+    current = open_list.pop(0)
+    for neighbor in G[current]:
+        if neighbor not in marked:
+            marked[neighbor] = True
+            open_list.append(neighbor)
+    return len(marked)
+
+
 def list_component_sizes(G):
     marked = {}
     for node in G:
