@@ -106,15 +106,34 @@ def count_connected_components(G):
     return n_components
 
 
-def remove_edge(G, edge):
-    for endp in edge:
-        G[edge[endp]] -= 1
-        if G[edge[endp]] == 0:
-            del G[edge[endp]]
+def remove_link(G, v1, v2):
+    for points in (v1, v2), (v2, v1):
+        G[points[0]][points[1]] -= 1
+        if G[points[0]][points[1]] == 0:
+            del G[points[0]][points[1]]
 
 
-def is_bridge_edge(G, edge):
+def is_bridge_edge(G, v1, v2):
     """ Given a connected graph G and edge = (v1, v2) in G, return if G is a bridge edge. """
 
     # strategy: remove edge from the graph, and count the number of connected components. If 2, edge was a bridge edge.
     # in either case, put edge back into the graph.
+    remove_link(G, v1, v2)
+    result = count_connected_components(G) == 2
+    make_link(G, v1, v2)
+
+    return result
+
+
+# def list_edges(G):
+#     """ Return the edges in graph G as a counter of tuples. """
+#
+#     def grow_edge_counter(counter, edge):
+#         for rep in edge, reversed(edge):
+#             if rep
+#
+#
+#     edge_counter = {}
+#
+#     for node in G:
+
