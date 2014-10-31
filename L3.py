@@ -106,7 +106,14 @@ def count_connected_components(G):
     return n_components
 
 
-#def is_bridge_edge(G, edge):
+def remove_edge(G, edge):
+    for endp in edge:
+        G[edge[endp]] -= 1
+        if G[edge[endp]] == 0:
+            del G[edge[endp]]
+
+
+def is_bridge_edge(G, edge):
     """ Given a connected graph G and edge = (v1, v2) in G, return if G is a bridge edge. """
 
     # strategy: remove edge from the graph, and count the number of connected components. If 2, edge was a bridge edge.
