@@ -92,5 +92,5 @@ def path(G, v1, v2):
 
 
 def centrality(G, v):
-    path_lengths = [len(path(G, v, other))-1 for other in G]
+    path_lengths = [len(path(G, v, other))-1 for other in G if other != v]
     return sum(path_lengths) / (len(path_lengths)-1.)
