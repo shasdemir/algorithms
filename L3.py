@@ -125,15 +125,21 @@ def is_bridge_edge(G, v1, v2):
     return result
 
 
-# def list_edges(G):
-#     """ Return the edges in graph G as a counter of tuples. """
-#
-#     def grow_edge_counter(counter, edge):
-#         for rep in edge, reversed(edge):
-#             if rep
-#
-#
-#     edge_counter = {}
-#
-#     for node in G:
+def list_edges(G):
+    """ Return the edges in graph G as a counter of tuples. """
 
+    def grow_edge_counter(counter, edge):
+        for rep in edge, edge[::-1]:
+            if rep in counter:
+                counter[rep] += 1
+            else:
+                counter[rep] = 1
+        if edge[::-1] in counter:
+            del counter[edge]
+
+    edge_counter = {}
+    for node in G:
+        for end in G[node]:
+            grow_edge_counter(edge_counter, (node, end))
+
+    return edge_counter
