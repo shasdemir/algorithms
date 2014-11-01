@@ -143,3 +143,11 @@ def list_edges(G):
             grow_edge_counter(edge_counter, (node, end))
 
     return edge_counter
+
+
+def list_bridge_edges(G):
+    """ Return a list od bridge edges in G. """
+
+    all_edges = list_edges(G)
+
+    return [edge for edge in all_edges if is_bridge_edge(G, *edge)]
