@@ -146,7 +146,7 @@ def list_edges(G):
 
 
 def list_bridge_edges(G):
-    """ Return a list od bridge edges in G. """
+    """ Return a list of bridge edges in G. """
 
     all_edges = list_edges(G)
 
