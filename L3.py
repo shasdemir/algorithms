@@ -212,8 +212,12 @@ def edges_to_nbors(G, node):
 def decrement_edge_counter(edge_counter, edge):
     if edge in edge_counter:
         edge_counter[edge] -= 1
+        if edge_counter[edge] == 0:
+            del edge_counter[edge]
     elif edge[::-1] in edge_counter:
         edge_counter[edge[::-1]] -= 1
+        if edge_counter[edge[::-1]] == 0:
+            del edge_counter[edge[::-1]]
     else:
         raise ValueError("Edge not in counter.")
 
