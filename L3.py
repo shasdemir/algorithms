@@ -217,7 +217,7 @@ def fleury(G):
         if not edge_taken:
             raise Exception("Can't find Eulerian path.")
 
-        remaining_edges -= set(edge_taken)
+        remaining_edges -= {edge_taken}
 
         path.append(edge_taken[1] if path[-1] == edge_taken[0] else edge_taken[0])
 
