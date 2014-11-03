@@ -151,3 +151,13 @@ def list_bridge_edges(G):
     all_edges = list_edges(G)
 
     return [edge for edge in all_edges if is_bridge_edge(G, *edge)]
+
+
+def remove_node(G, node):
+    """ Remove a node and all edges connected to it from the graph G. """
+
+    for neighbor in G[node]:
+        del G[neighbor][node]
+    del G[node]
+
+    return G
