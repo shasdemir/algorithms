@@ -118,7 +118,7 @@ def count_connected_components(G):
     marked = {}
     for node in G:
         if node not in marked:
-            mark_component_nr(G, node, marked)
+            mark_component(G, node, marked)
             n_components += 1
     return n_components
 
@@ -224,6 +224,17 @@ def decrement_edge_counter(edge_counter, edge):
     return edge_counter
 
 
+def degree(G, node):
+    return len(edges_to_nbors(G, node))
+
+
+def check_all_even_degree(G):
+    degrees = [degree(G, node) for node in G]
+    remainders = [deg % 2 for deg in degrees]
+
+    return 1 not in remainders
+
+
 def fleury(G, verbose=False):
     """ Implement Fleury's Algorithm of finding Eulerian Tours of graph G as descibed in
     http://www.ctl.ua.edu/math103/euler/ifagraph.htm. Return list of nodes visited. """
@@ -233,7 +244,6 @@ def fleury(G, verbose=False):
     remaining_edges = make_edge_counter(graph)
     path = [graph.keys()[0]]  # start from a random point
 
-    itercount = 0
     while remaining_edges:
         graph_of_remaining_edges = graph_from_edge_counter(remaining_edges)
 
@@ -256,8 +266,7 @@ def fleury(G, verbose=False):
             print "remaining edges before removal: " + str(remaining_edges)
             print "edge_taken: " + str(edge_taken)
 
-        if edge_taken in remaining_edges:
-            decrement_edge_counter(remaining_edges, edge_taken)
+        decrement_edge_counter(remaining_edges, edge_taken)
 
         if verbose:
             print "remaining edges after set difference: " + str(remaining_edges)
@@ -268,9 +277,6 @@ def fleury(G, verbose=False):
             print "path after appending this edge: " + str(path)
             print "**************"
 
-        itercount += 1
-        if itercount > 10:
-            remaining_edges = None
     return path
 
 
