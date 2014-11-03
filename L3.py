@@ -11,9 +11,11 @@ def make_link(G, node1, node2):
     return G
 
 
-flights = [("ORD", "SEA"), ("ORD", "LAX"), ('ORD', 'DFW'), ('ORD', 'PIT'),
-           ('SEA', 'LAX'), ('LAX', 'DFW'), ('ATL', 'PIT'), ('ATL', 'RDU'),
-           ('RDU', 'PHL'), ('PIT', 'PHL'), ('PHL', 'PVD')]
+def graph_from_edge_list(e_list):
+    graph = {}
+    for edge in e_list:
+        make_link(graph, *edge)
+    return graph
 
 
 def clustering_coefficient(G, v):
@@ -27,12 +29,8 @@ def clustering_coefficient(G, v):
     return 2.0 * links / (len(neighbors) * (len(neighbors)-1))
 
 
-def cc_G():
-    G = {}
-    for (x, y) in flights:
-        make_link(G, x, y)
-
-    print clustering_coefficient(G,"ORD")
+def cc_G(G):
+    print clustering_coefficient(G, "ORD")
 
     total = 0
     for v in G.keys():
@@ -192,13 +190,17 @@ def edges_to_nbors(G, node):
     return edges
 
 
-# def fleury(G):
-#     """ Implement Fleury's Algorithm of finding Eulerian Tours of graph G. Return list of nodes visited. """
-#
-#     graph = copy.deepcopy(G)
-#
-#     remaining_edges = list_edges(graph)
-#     path = [graph.keys()[0]]  # start from a random point
-#
-#     while remaining_edges:
-#         edges_to_nbors =
+def fleury(G):
+    """ Implement Fleury's Algorithm of finding Eulerian Tours of graph G. Return list of nodes visited. """
+
+    graph = copy.deepcopy(G)
+
+    remaining_edges = list_edges(graph)
+    path = [graph.keys()[0]]  # start from a random point
+
+    while remaining_edges:
+        graph_of_remaining_edges =
+        possible_edges = edges_to_nbors(graph, path[-1])
+        is_bridge_of_untravelled = []
+
+        for edge in possible_edges:
