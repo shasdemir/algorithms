@@ -3,11 +3,19 @@ import copy
 
 def make_link(G, node1, node2):
     if node1 not in G:
-        G[node1] = {}
-    (G[node1])[node2] = 1
+        G[node1] = {node2: 1}
+    elif node2 not in G[node1]:
+        G[node1][node2] = 1
+    else:
+        G[node1][node2] += 1
+
     if node2 not in G:
-        G[node2] = {}
-    (G[node2])[node1] = 1
+        G[node2] = {node1: 1}
+    elif node1 not in G[node2]:
+        G[node2][node1] = 1
+    else:
+        G[node2][node1] += 1
+
     return G
 
 
@@ -190,7 +198,7 @@ def edges_to_nbors(G, node):
     return edges
 
 
-def fleury(G):
+def fleury(G, verbose=False):
     """ Implement Fleury's Algorithm of finding Eulerian Tours of graph G as descibed in
     http://www.ctl.ua.edu/math103/euler/ifagraph.htm. Return list of nodes visited. """
 
@@ -199,9 +207,8 @@ def fleury(G):
     remaining_edges = set(list_edges(graph))
     path = [graph.keys()[0]]  # start from a random point
 
+    itercount = 0
     while remaining_edges:
-        print remaining_edges
-
         graph_of_remaining_edges = graph_from_edge_list(remaining_edges)
 
         possible_edges_to_go = edges_to_nbors(graph_of_remaining_edges, path[-1])
@@ -216,11 +223,30 @@ def fleury(G):
             edge_taken = [edge for edge in possible_edges_to_go if is_bridge_of_untravelled[edge] is False][0]
         if not edge_taken:
             raise Exception("Can't find Eulerian path.")
+        
+        if verbose:
+            print
+            print "**************"
+            print "remaining edges before removal: " + str(remaining_edges)
+            print "edge_taken: " + str(edge_taken)
 
-        remaining_edges -= {edge_taken}
+        if edge_taken in remaining_edges:
+            remaining_edges.remove(edge_taken)
+        else:
+            remaining_edges.remove((edge_taken[1], edge_taken[0]))
+
+        if verbose:
+            print "remaining edges after set difference: " + str(remaining_edges)
 
         path.append(edge_taken[1] if path[-1] == edge_taken[0] else edge_taken[0])
 
+        if verbose:
+            print "path after appending this edge: " + str(path)
+            print "**************"
+
+        itercount += 1
+        if itercount > 10:
+            remaining_edges = None
     return path
 
 
