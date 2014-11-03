@@ -1,3 +1,6 @@
+import copy
+
+
 def make_link(G, node1, node2):
     if node1 not in G:
         G[node1] = {}
@@ -170,11 +173,32 @@ def remove_node(G, node):
     return G
 
 
-# def is_neighbor_bridge(G, node, nbor):
-#     """ Return if the edghe to the neighbor
-#     """
-#
-#
+def reset_G():
+    flights = [("ORD", "SEA"), ("ORD", "LAX"), ('ORD', 'DFW'), ('ORD', 'PIT'),
+               ('SEA', 'LAX'), ('LAX', 'DFW'), ('ATL', 'PIT'), ('ATL', 'RDU'),
+               ('RDU', 'PHL'), ('PIT', 'PHL'), ('PHL', 'PVD')]
+    G = {}
+    for (x, y) in flights:
+        make_link(G, x, y)
+
+
+def edges_to_nbors(G, node):
+    """ Return the list of all edges connected to node. """
+
+    edges = []
+    for nbor in G[node]:
+        edges += [(node, nbor)] * G[node][nbor]
+
+    return edges
+
+
 # def fleury(G):
 #     """ Implement Fleury's Algorithm of finding Eulerian Tours of graph G. Return list of nodes visited. """
-
+#
+#     graph = copy.deepcopy(G)
+#
+#     remaining_edges = list_edges(graph)
+#     path = [graph.keys()[0]]  # start from a random point
+#
+#     while remaining_edges:
+#         edges_to_nbors =
