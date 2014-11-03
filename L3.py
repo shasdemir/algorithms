@@ -239,6 +239,9 @@ def fleury(G, verbose=False):
     """ Implement Fleury's Algorithm of finding Eulerian Tours of graph G as descibed in
     http://www.ctl.ua.edu/math103/euler/ifagraph.htm. Return list of nodes visited. """
 
+    if not check_all_even_degree(G):
+        return None
+
     graph = copy.deepcopy(G)
 
     remaining_edges = make_edge_counter(graph)
