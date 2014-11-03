@@ -113,6 +113,13 @@ def remove_link(G, v1, v2):
             del G[points[0]][points[1]]
 
 
+def remove_unconnected_nodes(G):
+    nodes = G.keys()
+    for node in nodes:
+        if not G[node]:
+            del G[node]
+
+
 def is_bridge_edge(G, v1, v2):
     """ Given a connected graph G and edge = (v1, v2) in G, return if G is a bridge edge. """
 
@@ -161,3 +168,13 @@ def remove_node(G, node):
     del G[node]
 
     return G
+
+
+# def is_neighbor_bridge(G, node, nbor):
+#     """ Return if the edghe to the neighbor
+#     """
+#
+#
+# def fleury(G):
+#     """ Implement Fleury's Algorithm of finding Eulerian Tours of graph G. Return list of nodes visited. """
+
