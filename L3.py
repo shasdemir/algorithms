@@ -26,6 +26,14 @@ def graph_from_edge_list(e_list):
     return graph
 
 
+def graph_from_edge_counter(e_counter):
+    graph = {}
+    for edge in e_counter:
+        for n_links in range(e_counter[edge]):
+            make_link(graph, *edge)
+    return graph
+
+
 def clustering_coefficient(G, v):
     neighbors = G[v].keys()
     if len(neighbors) == 1:
@@ -141,22 +149,25 @@ def is_bridge_edge(G, v1, v2):
     return result
 
 
-def list_edges(G):
+def make_edge_counter(G):
     """ Return the edges in graph G as a counter of tuples. """
 
     def grow_edge_counter(counter, edge):
-        for rep in edge, edge[::-1]:
-            if rep in counter:
-                counter[rep] += 1
-            else:
-                counter[rep] = 1
-        if edge[::-1] in counter:
-            del counter[edge]
+        if edge in counter:
+            counter[edge] += 1
+        elif edge[::-1] in counter:
+            counter[edge[::-1]] += 1
+        else:
+            counter[edge] = 1
 
     edge_counter = {}
     for node in G:
         for end in G[node]:
-            grow_edge_counter(edge_counter, (node, end))
+            for n_links in range(G[node][end]):
+                grow_edge_counter(edge_counter, (node, end))
+
+    for edge in edge_counter:
+        edge_counter[edge] /= 2
 
     return edge_counter
 
@@ -164,7 +175,7 @@ def list_edges(G):
 def list_bridge_edges(G):
     """ Return a list of bridge edges in G. """
 
-    all_edges = list_edges(G)
+    all_edges = make_edge_counter(G)
 
     return [edge for edge in all_edges if is_bridge_edge(G, *edge)]
 
@@ -198,18 +209,29 @@ def edges_to_nbors(G, node):
     return edges
 
 
+def decrement_edge_counter(edge_counter, edge):
+    if edge in edge_counter:
+        edge_counter[edge] -= 1
+    elif edge[::-1] in edge_counter:
+        edge_counter[edge[::-1]] -= 1
+    else:
+        raise ValueError("Edge not in counter.")
+
+    return edge_counter
+
+
 def fleury(G, verbose=False):
     """ Implement Fleury's Algorithm of finding Eulerian Tours of graph G as descibed in
     http://www.ctl.ua.edu/math103/euler/ifagraph.htm. Return list of nodes visited. """
 
     graph = copy.deepcopy(G)
 
-    remaining_edges = set(list_edges(graph))
+    remaining_edges = make_edge_counter(graph)
     path = [graph.keys()[0]]  # start from a random point
 
     itercount = 0
     while remaining_edges:
-        graph_of_remaining_edges = graph_from_edge_list(remaining_edges)
+        graph_of_remaining_edges = graph_from_edge_counter(remaining_edges)
 
         possible_edges_to_go = edges_to_nbors(graph_of_remaining_edges, path[-1])
 
@@ -223,7 +245,7 @@ def fleury(G, verbose=False):
             edge_taken = [edge for edge in possible_edges_to_go if is_bridge_of_untravelled[edge] is False][0]
         if not edge_taken:
             raise Exception("Can't find Eulerian path.")
-        
+
         if verbose:
             print
             print "**************"
@@ -231,9 +253,7 @@ def fleury(G, verbose=False):
             print "edge_taken: " + str(edge_taken)
 
         if edge_taken in remaining_edges:
-            remaining_edges.remove(edge_taken)
-        else:
-            remaining_edges.remove((edge_taken[1], edge_taken[0]))
+            decrement_edge_counter(remaining_edges, edge_taken)
 
         if verbose:
             print "remaining edges after set difference: " + str(remaining_edges)
