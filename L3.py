@@ -200,6 +200,8 @@ def fleury(G):
     path = [graph.keys()[0]]  # start from a random point
 
     while remaining_edges:
+        print remaining_edges
+
         graph_of_remaining_edges = graph_from_edge_list(remaining_edges)
 
         possible_edges_to_go = edges_to_nbors(graph_of_remaining_edges, path[-1])
@@ -220,3 +222,10 @@ def fleury(G):
         path.append(edge_taken[1] if path[-1] == edge_taken[0] else edge_taken[0])
 
     return path
+
+
+def make_fleury_trial_graph():
+    edges = "AB, BC, BC, AE, AE, EB, EC, AF, FE, FD, FD, DE, DC".split(', ')
+    edges = [(edge[0], edge[1]) for edge in edges]
+
+    return graph_from_edge_list(edges)
