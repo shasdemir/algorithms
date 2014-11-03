@@ -191,16 +191,32 @@ def edges_to_nbors(G, node):
 
 
 def fleury(G):
-    """ Implement Fleury's Algorithm of finding Eulerian Tours of graph G. Return list of nodes visited. """
+    """ Implement Fleury's Algorithm of finding Eulerian Tours of graph G as descibed in
+    http://www.ctl.ua.edu/math103/euler/ifagraph.htm. Return list of nodes visited. """
 
     graph = copy.deepcopy(G)
 
-    remaining_edges = list_edges(graph)
+    remaining_edges = set(list_edges(graph))
     path = [graph.keys()[0]]  # start from a random point
 
     while remaining_edges:
-        graph_of_remaining_edges =
-        possible_edges = edges_to_nbors(graph, path[-1])
-        is_bridge_of_untravelled = []
+        graph_of_remaining_edges = graph_from_edge_list(remaining_edges)
 
-        for edge in possible_edges:
+        possible_edges_to_go = edges_to_nbors(graph_of_remaining_edges, path[-1])
+
+        is_bridge_of_untravelled = {edge: is_bridge_edge(graph_of_remaining_edges, *edge)
+                                    for edge in possible_edges_to_go}
+
+        edge_taken = None
+        if is_bridge_of_untravelled == {edge: True for edge in is_bridge_of_untravelled}:
+            edge_taken = is_bridge_of_untravelled.keys()[0]
+        else:
+            edge_taken = [edge for edge in possible_edges_to_go if is_bridge_of_untravelled[edge] is False][0]
+        if not edge_taken:
+            raise Exception("Can't find Eulerian path.")
+
+        remaining_edges -= set(edge_taken)
+
+        path.append(edge_taken[1] if path[-1] == edge_taken[0] else edge_taken[0])
+
+    return path
