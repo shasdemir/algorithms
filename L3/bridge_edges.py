@@ -54,11 +54,11 @@ def create_rooted_spanning_tree(G, root):
 def post_order(graph, root):
     """ Return mapping between nodes in graph and their post-order. """
 
-    def calc_po(spanning_tree, root, po_counter):
-        children = direct_children(spanning_tree, root)
+    def calc_po(spanning_tree, node, po_counter, root):
+        children = direct_children(spanning_tree, node, root)
 
         for child in children:
-            calc_po(spanning_tree, child, po_counter)
+            calc_po(spanning_tree, child, po_counter, root)
 
         po_counter += 1
         po[root] = po_counter
@@ -67,4 +67,4 @@ def post_order(graph, root):
     po = {}
     po_counter = 0
 
-    return calc_po(spanning_tree, root, po_counter)
+    return calc_po(spanning_tree, root, po_counter, root)
