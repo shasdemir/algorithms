@@ -15,11 +15,11 @@ def make_colored_link(G, node1, node2, color):
     return G
 
 
-def create_uncolored_tree(G):
+def create_uncolored_tree(G, root):
     spanning_tree = {}
 
-    open_list = [G.keys()[0]]
-    visited = {open_list[0]}
+    open_list = [root]
+    checked = {open_list[0]}
 
     while open_list:
         current = open_list.pop(0)
@@ -28,8 +28,8 @@ def create_uncolored_tree(G):
             spanning_tree[current] = {}
 
         for neighbor in G[current]:
-            if neighbor not in visited:
-                visited.add(neighbor)
+            if neighbor not in checked:
+                checked.add(neighbor)
                 open_list.append(neighbor)
 
                 make_link(G=spanning_tree, node1=current, node2=neighbor)
@@ -37,10 +37,10 @@ def create_uncolored_tree(G):
     return spanning_tree
 
 
-def create_rooted_spanning_tree(G):
-    spanning_tree = create_uncolored_tree(G)
-    colored_tree = {}
+def create_rooted_spanning_tree(G, root):
+    spanning_tree = create_uncolored_tree(G, root)
 
+    colored_tree = {}
     for node in G:
         for nbor in G[node]:
             if nbor in spanning_tree[node]:
@@ -49,3 +49,6 @@ def create_rooted_spanning_tree(G):
                 make_colored_link(G=colored_tree, node1=node, node2=nbor, color='red')
 
     return colored_tree
+
+
+#def post_order(G):
