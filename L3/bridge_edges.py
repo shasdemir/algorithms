@@ -1,11 +1,20 @@
-__author__ = 'sukruhasdemir'
+from L3 import *
 
-G = {'a': {'c': 1, 'b': 1},
-     'b': {'a': 1, 'd': 1},
-     'c': {'a': 1, 'd': 1},
-     'd': {'c': 1, 'b': 1, 'e': 1},
-     'e': {'d': 1, 'g': 1, 'f': 1},
-     'f': {'e': 1, 'g': 1},
-     'g': {'e': 1, 'f': 1}}
 
+def make_colored_link(G, node1, node2, color=1):
+    if node1 not in G:
+        G[node1] = {node2: color}
+    elif node2 not in G[node1]:
+        G[node1][node2] = color
+
+    if node2 not in G:
+        G[node2] = {node1: color}
+    elif node1 not in G[node2]:
+        G[node2][node1] = color
+
+    return G
+
+
+# def create_rooted_spanning_tree(G):
+#     colored = {}
 
