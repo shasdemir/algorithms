@@ -54,17 +54,33 @@ def create_rooted_spanning_tree(G, root):
 def post_order(graph, root):
     """ Return mapping between nodes in graph and their post-order. """
 
-    def calc_po(spanning_tree, node, po_counter, root):
-        children = direct_children(spanning_tree, node, root)
+    def calc_po(spanning_tree, root, node, po_counter, po):
+        children = direct_children(spanning_tree, root, node)
 
         for child in children:
-            calc_po(spanning_tree, child, po_counter, root)
+            po_counter, po = calc_po(spanning_tree, root, child, po_counter, po)
 
         po_counter += 1
-        po[root] = po_counter
+        po[node] = po_counter
+        return po_counter, po
 
     spanning_tree = create_uncolored_tree(graph, root)
+
     po = {}
     po_counter = 0
+    calc_po(spanning_tree, root, root, po_counter, po)
 
-    return calc_po(spanning_tree, root, po_counter, root)
+    return po
+
+
+def direct_children(spanning_tree, root, node):
+    """ Return the list of direct children of node node, in a tree with root root."""
+
+    neighbors = spanning_tree[node].keys()
+
+    if node == root:
+        return neighbors
+
+    path_to_node = path(spanning_tree, root, node)
+
+    return [node for node in neighbors if node not in path_to_node]
