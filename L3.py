@@ -68,11 +68,12 @@ def mark_component_nr(G, node, marked):
     marked[node] = True
     open_list = [node]
 
-    current = open_list.pop(0)
-    for neighbor in G[current]:
-        if neighbor not in marked:
-            marked[neighbor] = True
-            open_list.append(neighbor)
+    while open_list:
+        current = open_list.pop(0)  # bfs
+        for neighbor in G[current]:
+            if neighbor not in marked:
+                marked[neighbor] = True
+                open_list.append(neighbor)
     return len(marked)
 
 
@@ -91,10 +92,8 @@ def check_connection(G, v1, v2):
 
 
 def path(G, v1, v2):
-    path_from_start = {}
-
     open_list = [v1]
-    path_from_start[v1] = [v1]
+    path_from_start = {v1: [v1]}
 
     while open_list:
         current = open_list.pop(0)  # bfs
