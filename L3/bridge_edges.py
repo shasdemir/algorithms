@@ -18,8 +18,8 @@ def make_colored_link(G, node1, node2, color):
 def create_uncolored_tree(G):
     spanning_tree = {}
 
-    visited = set()
     open_list = [G.keys()[0]]
+    visited = {open_list[0]}
 
     while open_list:
         current = open_list.pop(0)
