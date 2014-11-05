@@ -95,6 +95,9 @@ def path(G, v1, v2):
     open_list = [v1]
     path_from_start = {v1: [v1]}
 
+    if v1 == v2:
+        return path_from_start[v1]
+
     while open_list:
         current = open_list.pop(0)  # bfs
 
