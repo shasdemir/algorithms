@@ -83,3 +83,27 @@ def direct_children(spanning_tree, root, node):
     path_to_node = path(spanning_tree, root, node)
 
     return [node for node in neighbors if node not in path_to_node]
+
+
+def list_descendants(spanning_tree, root, node):
+    """ List all descendants of node, including itself. """
+
+    spanning_tree = create_uncolored_tree(spanning_tree, root)  # we only need green connections
+
+    all_nodes = spanning_tree.keys()
+
+    if node == root:
+        return all_nodes
+
+    path_to_node = path(spanning_tree, root, node)
+    dist_to_node = len(path_to_node)
+
+    return [other for other in all_nodes if path(spanning_tree, root, other)[:dist_to_node] == path_to_node]
+
+
+def number_of_descendants(spanning_tree, root):
+    """ Return the mapping between the nodes of spanning_tree and number of their descendants. """
+
+    return {node: len(list_descendants(spanning_tree, root, node)) for node in spanning_tree}
+
+
