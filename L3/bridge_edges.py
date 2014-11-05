@@ -111,7 +111,7 @@ def find_search_set(spanning_tree, root, node):
     """ Return the set of nodes to compare post_order values to calculate L (red)
     number for the node. """
 
-    descendants = direct_children(spanning_tree, root, node)
+    descendants = list_descendants(spanning_tree, root, node)
 
     # find points reachable from the descendants with a single red line
     reachable = set()
@@ -131,3 +131,13 @@ def lowest_post_order(spanning_tree, root, po):
         lpo[node] = min([po[s_node] for s_node in search_set])
 
     return lpo
+
+
+def highest_post_order(spanning_tree, root, po):
+    hpo = {}
+
+    for node in po:
+        search_set = find_search_set(spanning_tree, root, node)
+        hpo[node] = max([po[s_node] for s_node in search_set])
+
+    return hpo
