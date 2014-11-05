@@ -150,3 +150,35 @@ def check_edge_end(H, black, L, nd):
     number of descendants nd, check if this node is the end of a bridge edge. """
 
     return (H <= black) and (L > (black - nd))
+
+
+def bridge_edges(G, root):
+    """ Find bridge edges. """
+
+    root = sorted(G.keys())[0]
+    spanning_tree = create_rooted_spanning_tree(G, root)
+
+    po = post_order(G, root)
+    black = po
+    H = highest_post_order(spanning_tree, root, po)
+    L = lowest_post_order(spanning_tree, root, po)
+    nd = number_of_descendants(spanning_tree, root)
+
+    # check all green edges
+    bridge_edges = set()
+    for n1 in spanning_tree:
+        for n2 in spanning_tree[n1]:
+            if spanning_tree[n1][n2] == 'green':  # there is a green edge between n1 and n2
+                child = n1 if n1 in direct_children(spanning_tree, root, n2) else n2
+                parent = n2 if child == n1 else n1
+
+                if check_edge_end(H[child], black[child], L[child], nd[child]):
+                    bridge_edges.add((parent, child))
+
+    # remove reverse duplicates
+    be2 = copy.deepcopy(bridge_edges)
+    for edge in be2:
+        if (edge[1], edge[0]) in bridge_edges:
+            bridge_edges.remove((edge[1], edge[0]))
+
+    return list(bridge_edges)
