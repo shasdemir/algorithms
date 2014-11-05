@@ -107,3 +107,27 @@ def number_of_descendants(spanning_tree, root):
     return {node: len(list_descendants(spanning_tree, root, node)) for node in spanning_tree}
 
 
+def find_search_set(spanning_tree, root, node):
+    """ Return the set of nodes to compare post_order values to calculate L (red)
+    number for the node. """
+
+    descendants = direct_children(spanning_tree, root, node)
+
+    # find points reachable from the descendants with a single red line
+    reachable = set()
+    for desc in descendants:
+        for nbor in spanning_tree[desc]:
+            if spanning_tree[desc][nbor] == 'red':
+                reachable.add(nbor)
+
+    return reachable.union(set(descendants))
+
+
+def lowest_post_order(spanning_tree, root, po):
+    lpo = {}
+
+    for node in po:
+        search_set = find_search_set(spanning_tree, root, node)
+        lpo[node] = min([po[s_node] for s_node in search_set])
+
+    return lpo
