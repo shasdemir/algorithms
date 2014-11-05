@@ -141,3 +141,12 @@ def highest_post_order(spanning_tree, root, po):
         hpo[node] = max([po[s_node] for s_node in search_set])
 
     return hpo
+
+
+def check_edge_end(H, black, L, nd):
+    """ Given highest po H,
+    po black,
+    lowest po L,
+    number of descendants nd, check if this node is the end of a bridge edge. """
+
+    return (H <= black) and (L > (black - nd))
