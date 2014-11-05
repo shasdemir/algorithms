@@ -65,7 +65,6 @@ def post_order(graph, root):
         return po_counter, po
 
     spanning_tree = create_uncolored_tree(graph, root)
-
     po = {}
     po_counter = 0
     calc_po(spanning_tree, root, root, po_counter, po)
