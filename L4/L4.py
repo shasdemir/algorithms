@@ -107,12 +107,10 @@ def build_heap(L):
 
 
 def remove_min(L):
-    minimum = L.pop(0)
-
-    L[0], L[1:] = L[-1], L[:-1]  # move last element to the beginning
+    L[0] = L.pop()  # move last element to the beginning
     down_heapify(L, 0)
 
-    return L  # return minimum
+    return L
 
 
 def insert_heap(L, v):
