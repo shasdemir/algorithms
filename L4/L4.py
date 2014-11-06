@@ -1,3 +1,6 @@
+import random
+
+
 #            animal       speed   weight lifespan brain
 #                          (mph)   (kg)  (years) mass (g)
 animals = [("dog",          46,   35,     13,  280    ),
@@ -28,3 +31,37 @@ for i in range(len(answer)):
 
 def mean(L):
     return sum(L) / float(len(L))
+
+
+def rank(L, v):
+    pos = 0
+    for val in L:
+        if val < v:
+            pos += 1
+    return pos
+
+
+def partition(L, v):
+    left = []
+    right = []
+    for val in L:
+        if val < v:
+            left.append(val)
+        else:
+            right.append(val)
+    return left, [v], right
+
+
+def top_k(L, k):
+    v = random.choice(L)
+
+    left, middle, right = partition(L, v)
+
+    if len(left) == k:
+        return left
+    if len(left) + 1 == k:
+        return left + [v]
+    if len(left) > k:
+        return top_k(left, k)
+    if len(left) < k:
+        return [v] + top_k(right, k - len(left) + 1)
