@@ -24,3 +24,7 @@ answer = importance_rank(animals, (2,3,7,1))
 
 for i in range(len(answer)):
     print i, answer[i][1], "(", answer[i][0], ")"
+
+
+def mean(L):
+    return sum(L) / float(len(L))
