@@ -78,7 +78,7 @@ one_child = lambda L, i: right(i) == len(L)  # the node only has a left child
 def down_heapify(L, i):
     """ Call this if the heap rooted at i satisfies the heap property except perhaps i to its immediate children. """
 
-    if is_leaf(i):
+    if is_leaf(L, i):
         return L
 
     if one_child(L, i):
@@ -97,5 +97,24 @@ def down_heapify(L, i):
     else:
         L[i], L[right(i)] = L[right(i)], L[i]
         down_heapify(L, right(i))
-
     return L
+
+
+def build_heap(L):
+    for i in range(len(L)-1, -1, -1):
+        down_heapify(L, i)
+    return L
+
+
+def remove_min(L):
+    minimum = L.pop(0)
+
+    L[0], L[1:] = L[-1], L[:-1]  # move last element to the beginning
+    down_heapify(L, 0)
+
+    return L  # return minimum
+
+
+def insert_heap(L, v):
+    L.append(v)
+    up_heapify(L, len(L)-1)
