@@ -23,10 +23,10 @@ def importance_rank(items, weights):
     res2 = sorted(results) # sort the tuple based on the score
     return res2
 
-answer = importance_rank(animals, (2,3,7,1))
+answer = importance_rank(animals, (2, 3, 7, 1))
 
-for i in range(len(answer)):
-    print i, answer[i][1], "(", answer[i][0], ")"
+# for i in range(len(answer)):
+#     print i, answer[i][1], "(", answer[i][0], ")"
 
 
 def mean(L):
@@ -64,4 +64,38 @@ def top_k(L, k):
     if len(left) > k:
         return top_k(left, k)
     if len(left) < k:
-        return [v] + top_k(right, k - len(left) + 1)
+        return left + [v] + top_k(right, k - len(left) - 1)
+
+
+left = lambda i: 2 * i + 1
+right = lambda i: 2 * i + 2
+parent = lambda i: (i - 1) // 2
+is_root = lambda i: i == 0
+is_leaf = lambda L, i: right(i) > len(L) and left(i) > len(L)
+one_child = lambda L, i: right(i) == len(L)  # the node only has a left child
+
+
+def down_heapify(L, i):
+    """ Call this if the heap rooted at i satisfies the heap property except perhaps i to its immediate children. """
+
+    if is_leaf(i):
+        return L
+
+    if one_child(L, i):
+        if L[i] > L[left(i)]:
+            L[i], L[left(i)] = L[left(i)], L[i]
+            return L
+
+    # i has two children, check heap property
+    if min(L[left(i)], L[right(i)]) >= L[i]:
+        return L
+
+    # if that fails, swap with the smaller child, and recurse on its children
+    if L[left(i)] < L[right(i)]:
+        L[i], L[left(i)] = L[left(i)], L[i]
+        down_heapify(L, left(i))
+    else:
+        L[i], L[right(i)] = L[right(i)], L[i]
+        down_heapify(L, right(i))
+
+    return L
