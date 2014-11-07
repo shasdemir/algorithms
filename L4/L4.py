@@ -119,9 +119,20 @@ def insert_heap(L, v):
 
 
 def median(L):  # theta(n)
-    lower_half = top_k(L, ((len(L)+1) / 2 ))
+    lower_half = top_k(L, ((len(L)+1) / 2))
     return sorted(lower_half)[-1]
 
 
 def minimize_absolute(L):
     return median(L)
+
+
+def mode(L):
+    counts = {}
+    for item in L:
+        if item not in counts:
+            counts[item] = 1
+        else:
+            counts[item] += 1
+
+    return sorted(counts.items(), key=lambda x: x[1])[-1][0]
