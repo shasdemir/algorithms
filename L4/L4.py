@@ -136,3 +136,35 @@ def mode(L):
             counts[item] += 1
 
     return sorted(counts.items(), key=lambda x: x[1])[-1][0]
+
+
+def up_heapify(L, i):
+    if i == 0 or L[parent(i)] <= L[i]:
+        return L
+    else:
+        L[parent(i)], L[i] = L[i], L[parent(i)]
+        return up_heapify(L, parent(i))
+
+
+def path(G, v1, v2):
+    open_list = [v1]
+    path_from_start = {v1: [v1]}
+
+    if v1 == v2:
+        return path_from_start[v1]
+
+    while open_list:
+        current = open_list.pop(0)  # bfs
+
+        for neighbor in G[current]:
+            if neighbor not in path_from_start:
+                path_from_start[neighbor] = path_from_start[current] + [neighbor]
+                if neighbor == v2:
+                    return path_from_start[v2]
+                open_list.append(neighbor)
+    return False
+
+
+def centrality(G, v):
+    path_lengths = [len(path(G, v, other))-1 for other in G if other != v]
+    return sum(path_lengths) / (len(path_lengths)-1.)
