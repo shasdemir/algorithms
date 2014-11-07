@@ -184,5 +184,19 @@ def path(G, v1, v2):
 
 
 def centrality(G, v):
-    path_lengths = [len(path(G, v, other))-1 for other in G if other != v]
-    return sum(path_lengths) / (len(path_lengths)-1.)
+    open_list = [v]
+    distance_from_start = {v: 0}
+
+    while open_list:
+        current = open_list.pop(0)  # bfs
+
+        for neighbor in G[current]:
+            if neighbor not in distance_from_start:
+                distance_from_start[neighbor] = distance_from_start[current] + 1
+                open_list.append(neighbor)
+    return sum(distance_from_start.values()) / float(len(distance_from_start))
+
+
+def centrality_naive(G, v):
+    path_lengths = [len(path(G, v, other))-1 for other in G]
+    return sum(path_lengths) / float(len(G.keys()))
