@@ -146,6 +146,24 @@ def up_heapify(L, i):
         return up_heapify(L, parent(i))
 
 
+def make_link(G, node1, node2):
+    if node1 not in G:
+        G[node1] = {node2: 1}
+    elif node2 not in G[node1]:
+        G[node1][node2] = 1
+    else:
+        G[node1][node2] += 1
+
+    if node2 not in G:
+        G[node2] = {node1: 1}
+    elif node1 not in G[node2]:
+        G[node2][node1] = 1
+    else:
+        G[node2][node1] += 1
+
+    return G
+
+
 def path(G, v1, v2):
     open_list = [v1]
     path_from_start = {v1: [v1]}
