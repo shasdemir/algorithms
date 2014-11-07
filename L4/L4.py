@@ -47,12 +47,12 @@ def partition(L, v):
     for val in L:
         if val < v:
             left.append(val)
-        else:
+        elif v < val:
             right.append(val)
     return left, [v], right
 
 
-def top_k(L, k):
+def top_k(L, k):  # actually the smallest k
     v = random.choice(L)
 
     left, middle, right = partition(L, v)
@@ -63,7 +63,7 @@ def top_k(L, k):
         return left + [v]
     if len(left) > k:
         return top_k(left, k)
-    if len(left) < k:
+    else:
         return left + [v] + top_k(right, k - len(left) - 1)
 
 
@@ -116,3 +116,12 @@ def remove_min(L):
 def insert_heap(L, v):
     L.append(v)
     up_heapify(L, len(L)-1)
+
+
+def median(L):  # theta(n)
+    lower_half = top_k(L, ((len(L)+1) / 2 ))
+    return sorted(lower_half)[-1]
+
+
+def minimize_absolute(L):
+    return median(L)
