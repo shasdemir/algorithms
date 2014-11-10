@@ -6,7 +6,6 @@ def dijkstra(G, v):
         w = shortest_dist_node(dist_so_far)
 
         # lock it down
-        print "lock", w, dist_so_far[w]
         final_dist[w] = dist_so_far[w]
         del dist_so_far[w]
 
@@ -18,3 +17,7 @@ def dijkstra(G, v):
                     dist_so_far[x] = final_dist[w] + G[w][x]
 
     return final_dist
+
+
+def shortest_dist_node(dist):
+    return min(dist.items(), key=lambda tup: tup[1])[0]  # Theta(n)
