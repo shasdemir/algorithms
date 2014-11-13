@@ -106,7 +106,6 @@ def build_heap(L):
 def remove_min(L):
     L[0] = L.pop()  # move last element to the beginning
     down_heapify(L, 0)
-
     return L
 
 
