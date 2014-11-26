@@ -24,12 +24,26 @@ def shortest_dist_node(dist):
 
 
 class NamedHeap(object):
+    left = lambda i: 2 * i + 1
+    right = lambda i: 2 * i + 2
+    parent = lambda i: (i - 1) // 2
+    is_root = lambda i: i == 0
+    is_leaf = lambda L, i: right(i) > len(L) and left(i) > len(L)
+    one_child = lambda L, i: right(i) == len(L)  # the node only has a left child
+
     def __init__(self, heap_list, heaped_names):
         self.heap_list = heap_list
         self.heaped_names = heaped_names
         self.name_mapping = dict(zip(heaped_names, heap_list))
 
-        self.down_heapify(self, 0)
+        self.build_heap(self, 0)
+
+    def __up_heapify__(self, i):
+        if not (i == 0 or self.heap_list[parent(i)] <= self.heap_list[i]):
+            self.heap_list[parent(i)], self.heap_list[i] = self.heap_list[i], self.heap_list[parent(i)]
+            self.heaped_names[parent(i)], self.heaped_names[i] = self.heaped_names[i], self.heaped_names[parent(i)]
+
+            self.__up_heapify__(parent(i))
 
     def get_value(self, name):
         return self.name_mapping[name]
@@ -37,4 +51,5 @@ class NamedHeap(object):
     def get_minimum(self):
         return self.heaped_names[0], self.heap_list[0]
 
+    #def add_value(self, new_name, new_value):
 
