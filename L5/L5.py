@@ -63,8 +63,17 @@ class NamedHeap(object):
                 return
 
         # i has two children, check heap property
-        
+        if min(self.heap_list[left(i)], self.heap_list[right(i)]) >= self.heap_list[i]:
+            return
 
+        # if that fails, swap with the smaller child, and recurse on its children
+        if self.heap_list[left(i)] < self.heap_list[right(i)]:
+            self.__swap__(i, left(i))
+            self.__down_heapify__(left(i))
+        else:
+            self.__swap__(i, right(i))
+            self.__down_heapify__(right(i))
+        return
 
     def get_value(self, name):
         return self.name_mapping[name]
