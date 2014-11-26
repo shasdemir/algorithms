@@ -59,7 +59,11 @@ class NamedHeap(object):
 
         if one_child(self.heap_list, i):
             if self.heap_list[i] > self.heap_list[left(i)]:
+                self.__swap__(i, left(i))
+                return
 
+        # i has two children, check heap property
+        
 
 
     def get_value(self, name):
