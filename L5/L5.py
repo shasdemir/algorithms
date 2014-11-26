@@ -24,6 +24,7 @@ def shortest_dist_node(dist):
 
 
 class NamedHeap(object):
+
     left = lambda i: 2 * i + 1
     right = lambda i: 2 * i + 2
     parent = lambda i: (i - 1) // 2
@@ -38,12 +39,28 @@ class NamedHeap(object):
 
         self.build_heap(self, 0)
 
+    def __swap__(self, p1, p2):
+        """ Swap elements of both heap_list and heaped_names at positions p1 and p2. """
+
+        self.heap_list[p1], self.heap_list[p2] = self.heap_list[p2], self.heap_list[p1]
+        self.heaped_names[p1], self.heaped_names[p2] = self.heaped_names[p2], self.heaped_names[p1]
+
     def __up_heapify__(self, i):
         if not (i == 0 or self.heap_list[parent(i)] <= self.heap_list[i]):
-            self.heap_list[parent(i)], self.heap_list[i] = self.heap_list[i], self.heap_list[parent(i)]
-            self.heaped_names[parent(i)], self.heaped_names[i] = self.heaped_names[i], self.heaped_names[parent(i)]
-
+            self.__swap__(parent(i), i)
             self.__up_heapify__(parent(i))
+
+    def __down_heapify__(self, i):
+        """ Call this if the heap rooted at i satisfies the heap property except perhaps i to its immediate
+        children. """
+
+        if is_leaf(self.heap_list, i):
+            return
+
+        if one_child(self.heap_list, i):
+            if self.heap_list[i] > self.heap_list[left(i)]:
+
+
 
     def get_value(self, name):
         return self.name_mapping[name]
