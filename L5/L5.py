@@ -73,7 +73,10 @@ class NamedHeap(object):
         else:
             self.__swap__(i, right(i))
             self.__down_heapify__(right(i))
-        return
+
+    def __build_heap__(self):
+        for i in range(len(self.heap_list)-1, -1, -1):
+            self.__down_heapify__(i)
 
     def get_value(self, name):
         return self.name_mapping[name]
