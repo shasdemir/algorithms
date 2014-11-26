@@ -78,11 +78,20 @@ class NamedHeap(object):
         for i in range(len(self.heap_list)-1, -1, -1):
             self.__down_heapify__(i)
 
+    def __remove_min__(self):
+        self.heap_list[0] = self.heap_list.pop()
+        self.heaped_names[0] = self.heaped_names.pop()
+
+        self.__down_heapify__(0)
+
     def get_value(self, name):
         return self.name_mapping[name]
 
     def get_minimum(self):
         return self.heaped_names[0], self.heap_list[0]
 
-    #def add_value(self, new_name, new_value):
+    def insert_value(self, new_name, new_value):
+        self.heaped_names.append(new_name)
+        self.heap_list.append(new_value)
 
+        self.__up_heapify__(len(self.heap_list)-1)
