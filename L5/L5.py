@@ -38,28 +38,31 @@ class NamedHeap(object):
 
         self.__build_heap__()
 
+    def __normalized_index__(self, i):
+        """ Return non-negative list indices. """
+
+        return i + len(self.heap_list) if i < 0 else i
+
     def __swap__(self, p1, p2):
         """ Swap elements of both heap_list and heaped_names at positions p1 and p2. """
+
+        p1, p2 = (self.__normalized_index__(k) for k in (p1, p2))
 
         self.heap_list[p1], self.heap_list[p2] = self.heap_list[p2], self.heap_list[p1]
         self.heaped_names[p1], self.heaped_names[p2] = self.heaped_names[p2], self.heaped_names[p1]
 
     def __up_heapify__(self, i):
+        i = self.__normalized_index__(i)
+
         if not (i == 0 or self.heap_list[self.parent(i)] <= self.heap_list[i]):
-            self.__swap__(parent(i), i)
-            self.__up_heapify__(parent(i))
+            self.__swap__(self.parent(i), i)
+            self.__up_heapify__(self.parent(i))
 
     def __down_heapify__(self, i):
         """ Call this if the heap rooted at i satisfies the heap property except perhaps i to its immediate
         children. """
 
-        print "***"
-        print "inputs to down_heapify: "
-        print "self.heap_list: %s" % self.heap_list
-        print "i: %s" % i
-
         if self.is_leaf(self.heap_list, i):
-            print "... is leaf!"
             return
 
         if self.one_child(self.heap_list, i):
