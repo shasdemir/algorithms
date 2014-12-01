@@ -67,7 +67,7 @@ class NamedHeap(object):
 
         if self.one_child(self.heap_list, i):
             if self.heap_list[i] > self.heap_list[self.left(i)]:
-                self.__swap__(i, left(i))
+                self.__swap__(i, self.left(i))
                 return
 
         # i has two children, check heap property
