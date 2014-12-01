@@ -37,7 +37,7 @@ class NamedHeap(object):
         self.heaped_names = heaped_names
         self.name_mapping = dict(zip(heaped_names, heap_list))
 
-        self.build_heap(self, 0)
+        self.__build_heap__()
 
     def __swap__(self, p1, p2):
         """ Swap elements of both heap_list and heaped_names at positions p1 and p2. """
@@ -79,7 +79,7 @@ class NamedHeap(object):
             self.__down_heapify__(i)
 
     def __remove_min__(self):
-        del self.name_mapping[self.heaped_names[-1]]
+        del self.name_mapping[self.heaped_names[0]]
         self.heap_list[0] = self.heap_list.pop()
         self.heaped_names[0] = self.heaped_names.pop()
 
@@ -90,6 +90,11 @@ class NamedHeap(object):
 
     def get_minimum(self):
         return self.heaped_names[0], self.heap_list[0]
+
+    def pop_minimum(self):
+        minimum = self.get_minimum()
+        self.__remove_min__()
+        return minimum
 
     def insert_value(self, new_name, new_value):
         self.heaped_names.append(new_name)
