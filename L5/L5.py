@@ -1,4 +1,4 @@
-def dijkstra(G, v):
+def dijkstra_old(G, v):
     dist_so_far = {v: 0}
     final_dist = {}
 
@@ -21,6 +21,27 @@ def dijkstra(G, v):
 
 def shortest_dist_node(dist):
     return min(dist.items(), key=lambda tup: tup[1])[0]  # Theta(n)
+
+
+def dijkstra(G, v):
+    dist_so_far_heap = NamedHeap(heap_list=[0], heaped_names=[v])
+    final_dist = {}
+
+    while len(final_dist) < len(G):  # assuming connected graph
+        w, w_dist = dist_so_far_heap.shortest_dist_node()
+
+        # lock it down
+        final_dist[w] = w_dist
+        dist_so_far_heap.pop_minimum()
+
+        for x in G[w]:
+            if x not in final_dist:
+                if x not in dist_so_far_heap.heaped_names:
+                    dist_so_far_heap.insert_value(new_name=x, new_value=final_dist[w] + G[w][x])
+                elif final_dist[w] + G[w][x] < dist_so_far_heap.get_value(x):
+                    dist_so_far_heap.decrease_value(name=x, new_value=final_dist[w] + G[w][x])
+
+    return final_dist
 
 
 class NamedHeap(object):
@@ -63,7 +84,7 @@ class NamedHeap(object):
         children. """
 
         i = self.__normalized_index__(i)
-        
+
         if self.is_leaf(self.heap_list, i):
             return
 
@@ -101,6 +122,9 @@ class NamedHeap(object):
     def get_minimum(self):
         return self.heaped_names[0], self.heap_list[0]
 
+    def shortest_dist_node(self):
+        return self.get_minimum()
+
     def pop_minimum(self):
         minimum = self.get_minimum()
         self.__remove_min__()
@@ -112,3 +136,12 @@ class NamedHeap(object):
         self.name_mapping[new_name] = new_value
 
         self.__up_heapify__(len(self.heap_list)-1)
+
+    def decrease_value(self, name, new_value):
+        """ Decrease the value of already existing name. """
+
+        index = self.heaped_names.index(name)
+        self.heap_list[index] = new_value
+        self.name_mapping[name] = new_value
+
+        self.__up_heapify__(index)
