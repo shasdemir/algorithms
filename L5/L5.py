@@ -62,6 +62,8 @@ class NamedHeap(object):
         """ Call this if the heap rooted at i satisfies the heap property except perhaps i to its immediate
         children. """
 
+        i = self.__normalized_index__(i)
+        
         if self.is_leaf(self.heap_list, i):
             return
 
