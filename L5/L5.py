@@ -33,7 +33,7 @@ class NamedHeap(object):
         self.right = lambda i: 2 * i + 2
         self.parent = lambda i: (i - 1) // 2
         self.is_root = lambda i: i == 0
-        self.is_leaf = lambda L, i: self.right(i) > len(L) and self.left(i) > len(L)
+        self.is_leaf = lambda L, i: self.right(i) >= len(L) and self.left(i) >= len(L)
         self.one_child = lambda L, i: self.right(i) == len(L)  # the node only has a left child
 
         self.__build_heap__()
@@ -53,7 +53,13 @@ class NamedHeap(object):
         """ Call this if the heap rooted at i satisfies the heap property except perhaps i to its immediate
         children. """
 
+        print "***"
+        print "inputs to down_heapify: "
+        print "self.heap_list: %s" % self.heap_list
+        print "i: %s" % i
+
         if self.is_leaf(self.heap_list, i):
+            print "... is leaf!"
             return
 
         if self.one_child(self.heap_list, i):
