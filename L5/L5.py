@@ -24,18 +24,17 @@ def shortest_dist_node(dist):
 
 
 class NamedHeap(object):
-
-    left = lambda i: 2 * i + 1
-    right = lambda i: 2 * i + 2
-    parent = lambda i: (i - 1) // 2
-    is_root = lambda i: i == 0
-    is_leaf = lambda L, i: right(i) > len(L) and left(i) > len(L)
-    one_child = lambda L, i: right(i) == len(L)  # the node only has a left child
-
     def __init__(self, heap_list, heaped_names):
         self.heap_list = heap_list
         self.heaped_names = heaped_names
         self.name_mapping = dict(zip(heaped_names, heap_list))
+
+        self.left = lambda i: 2 * i + 1
+        self.right = lambda i: 2 * i + 2
+        self.parent = lambda i: (i - 1) // 2
+        self.is_root = lambda i: i == 0
+        self.is_leaf = lambda L, i: self.right(i) > len(L) and self.left(i) > len(L)
+        self.one_child = lambda L, i: self.right(i) == len(L)  # the node only has a left child
 
         self.__build_heap__()
 
@@ -46,7 +45,7 @@ class NamedHeap(object):
         self.heaped_names[p1], self.heaped_names[p2] = self.heaped_names[p2], self.heaped_names[p1]
 
     def __up_heapify__(self, i):
-        if not (i == 0 or self.heap_list[parent(i)] <= self.heap_list[i]):
+        if not (i == 0 or self.heap_list[self.parent(i)] <= self.heap_list[i]):
             self.__swap__(parent(i), i)
             self.__up_heapify__(parent(i))
 
@@ -54,25 +53,25 @@ class NamedHeap(object):
         """ Call this if the heap rooted at i satisfies the heap property except perhaps i to its immediate
         children. """
 
-        if is_leaf(self.heap_list, i):
+        if self.is_leaf(self.heap_list, i):
             return
 
-        if one_child(self.heap_list, i):
-            if self.heap_list[i] > self.heap_list[left(i)]:
+        if self.one_child(self.heap_list, i):
+            if self.heap_list[i] > self.heap_list[self.left(i)]:
                 self.__swap__(i, left(i))
                 return
 
         # i has two children, check heap property
-        if min(self.heap_list[left(i)], self.heap_list[right(i)]) >= self.heap_list[i]:
+        if min(self.heap_list[self.left(i)], self.heap_list[self.right(i)]) >= self.heap_list[i]:
             return
 
         # if that fails, swap with the smaller child, and recurse on its children
-        if self.heap_list[left(i)] < self.heap_list[right(i)]:
-            self.__swap__(i, left(i))
-            self.__down_heapify__(left(i))
+        if self.heap_list[self.left(i)] < self.heap_list[self.right(i)]:
+            self.__swap__(i, self.left(i))
+            self.__down_heapify__(self.left(i))
         else:
-            self.__swap__(i, right(i))
-            self.__down_heapify__(right(i))
+            self.__swap__(i, self.right(i))
+            self.__down_heapify__(self.right(i))
 
     def __build_heap__(self):
         for i in range(len(self.heap_list)-1, -1, -1):
