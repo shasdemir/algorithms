@@ -32,6 +32,27 @@ class NamedTests(unittest.TestCase):
         assert dist[g] == 8  # (a -> d -> e -> g)
         assert dist[b] == 11  # (a -> d -> e -> g -> f -> b)
 
+    def test_dijkstra_2(self):
+        (a, b, c, d, e, f, g) = (0, 1, 2, 3, 4, 5, 6)
+        triples = ((a, b, 2), (a, c, 2), (a, d, 4), (a, e, 2), (a, f, 4), (b, g, 5), (c, d, 4), (d, e, 1))
+        G = {}
+        for (i, j, k) in triples:
+            make_link(G, i, j, k)
+
+        assert dijkstra(G, a)[d] == 3  # a -> e -> d
+        return
+
+    def test__dijkstra_3(self):
+        (a, b, c, d) = ('A', 'B', 'C', 'D')
+        triples = ((a, b, 1), (a, c, 4), (a, d, 4), (b, c, 1), (c, d, 1))
+        G = {}
+        for (i, j, k) in triples:
+            make_link(G, i, j, k)
+
+        dist = dijkstra(G, a)
+
+        assert dist[d] == 3  # (a -> b -> c -> d)
+
 
 if __name__ == '__main__':
     unittest.main()

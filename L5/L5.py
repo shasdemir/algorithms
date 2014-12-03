@@ -36,7 +36,7 @@ def dijkstra(G, v):
 
         for x in G[w]:
             if x not in final_dist:
-                if x not in dist_so_far_heap.heaped_names:
+                if x not in dist_so_far_heap.name_mapping:
                     dist_so_far_heap.insert_value(new_name=x, new_value=final_dist[w] + G[w][x])
                 elif final_dist[w] + G[w][x] < dist_so_far_heap.get_value(x):
                     dist_so_far_heap.decrease_value(name=x, new_value=final_dist[w] + G[w][x])
