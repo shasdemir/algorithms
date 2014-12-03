@@ -44,6 +44,20 @@ def dijkstra(G, v):
     return final_dist
 
 
+def make_link(G, node1, node2, w):
+    if node1 not in G:
+        G[node1] = {}
+    if node2 not in G[node1]:
+        (G[node1])[node2] = 0
+    (G[node1])[node2] += w
+    if node2 not in G:
+        G[node2] = {}
+    if node1 not in G[node2]:
+        (G[node2])[node1] = 0
+    (G[node2])[node1] += w
+    return G
+
+
 class NamedHeap(object):
     def __init__(self, heap_list, heaped_names):
         self.heap_list = heap_list
@@ -91,7 +105,7 @@ class NamedHeap(object):
         if self.one_child(self.heap_list, i):
             if self.heap_list[i] > self.heap_list[self.left(i)]:
                 self.__swap__(i, self.left(i))
-                return
+            return
 
         # i has two children, check heap property
         if min(self.heap_list[self.left(i)], self.heap_list[self.right(i)]) >= self.heap_list[i]:
@@ -111,10 +125,15 @@ class NamedHeap(object):
 
     def __remove_min__(self):
         del self.name_mapping[self.heaped_names[0]]
-        self.heap_list[0] = self.heap_list.pop()
-        self.heaped_names[0] = self.heaped_names.pop()
 
-        self.__down_heapify__(0)
+        if len(self.heap_list) == 1:
+            self.heap_list = []
+            self. heaped_names = []
+        else:
+            self.heap_list[0] = self.heap_list.pop()
+            self.heaped_names[0] = self.heaped_names.pop()
+
+            self.__down_heapify__(0)
 
     def get_value(self, name):
         return self.name_mapping[name]
