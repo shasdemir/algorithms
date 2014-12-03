@@ -27,8 +27,6 @@ class NamedTests(unittest.TestCase):
 
         dist = dijkstra(G, a)
 
-        print "dist: %s" % dist
-
         assert dist[g] == 8  # (a -> d -> e -> g)
         assert dist[b] == 11  # (a -> d -> e -> g -> f -> b)
 
