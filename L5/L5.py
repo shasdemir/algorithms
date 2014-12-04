@@ -24,7 +24,7 @@ def shortest_dist_node(dist):
 
 
 def dijkstra(G, v):
-    dist_so_far_heap = NamedHeap(heap_list=[0], heaped_names=[v])
+    dist_so_far_heap = NamedHeap(heap_list=[(0, v)])
     final_dist = {}
 
     while len(final_dist) < len(G):  # assuming connected graph
@@ -36,7 +36,7 @@ def dijkstra(G, v):
 
         for x in G[w]:
             if x not in final_dist:
-                if x not in dist_so_far_heap.name_mapping:
+                if x not in dist_so_far_heap.value_map:
                     dist_so_far_heap.insert_value(new_name=x, new_value=final_dist[w] + G[w][x])
                 elif final_dist[w] + G[w][x] < dist_so_far_heap.get_value(x):
                     dist_so_far_heap.decrease_value(name=x, new_value=final_dist[w] + G[w][x])
@@ -59,10 +59,17 @@ def make_link(G, node1, node2, w):
 
 
 class NamedHeap(object):
-    def __init__(self, heap_list, heaped_names):
+    def __init__(self, heap_list):
+        """ heap_list is a list of tuples (no, name)
+            value_map maps item names to their values on the heap
+            position_map maps item names to their positions on the heap_list. """
+
         self.heap_list = heap_list
-        self.heaped_names = heaped_names
-        self.name_mapping = dict(zip(heaped_names, heap_list))
+        self.value_map = {item[1]: item[0] for item in heap_list}
+
+        self.position_map = {}
+        for k in xrange(len(heap_list)):
+            self.position_map[self.heap_list[k][1]] = k
 
         self.left = lambda i: 2 * i + 1
         self.right = lambda i: 2 * i + 2
@@ -79,12 +86,14 @@ class NamedHeap(object):
         return i + len(self.heap_list) if i < 0 else i
 
     def __swap__(self, p1, p2):
-        """ Swap elements of both heap_list and heaped_names at positions p1 and p2. """
+        """ Swap elements of heap_list at positions p1 and p2. """
 
         p1, p2 = (self.__normalized_index__(k) for k in (p1, p2))
 
         self.heap_list[p1], self.heap_list[p2] = self.heap_list[p2], self.heap_list[p1]
-        self.heaped_names[p1], self.heaped_names[p2] = self.heaped_names[p2], self.heaped_names[p1]
+
+        self.position_map[self.heap_list[p1][1]], self.position_map[self.heap_list[p2][1]] = \
+            self.position_map[self.heap_list[p2][1]], self.position_map[self.heap_list[p1][1]]
 
     def __up_heapify__(self, i):
         i = self.__normalized_index__(i)
@@ -124,22 +133,23 @@ class NamedHeap(object):
             self.__down_heapify__(i)
 
     def __remove_min__(self):
-        del self.name_mapping[self.heaped_names[0]]
+        del self.value_map[self.heap_list[0][1]]
+        del self.position_map[self.heap_list[0][1]]
 
         if len(self.heap_list) == 1:
             self.heap_list = []
-            self. heaped_names = []
         else:
             self.heap_list[0] = self.heap_list.pop()
-            self.heaped_names[0] = self.heaped_names.pop()
+
+            self.position_map[self.heap_list[0][1]] = 0
 
             self.__down_heapify__(0)
 
     def get_value(self, name):
-        return self.name_mapping[name]
+        return self.value_map[name]
 
     def get_minimum(self):
-        return self.heaped_names[0], self.heap_list[0]
+        return self.heap_list[0][1], self.heap_list[0][0]
 
     def shortest_dist_node(self):
         return self.get_minimum()
@@ -150,17 +160,17 @@ class NamedHeap(object):
         return minimum
 
     def insert_value(self, new_name, new_value):
-        self.heaped_names.append(new_name)
-        self.heap_list.append(new_value)
-        self.name_mapping[new_name] = new_value
+        self.heap_list.append((new_value, new_name))
+        self.value_map[new_name] = new_value
+        self.position_map[new_name] = len(self.heap_list) - 1
 
-        self.__up_heapify__(len(self.heap_list)-1)
+        self.__up_heapify__(-1)
 
     def decrease_value(self, name, new_value):
         """ Decrease the value of already existing name. """
 
-        index = self.heaped_names.index(name)
-        self.heap_list[index] = new_value
-        self.name_mapping[name] = new_value
+        index = self.position_map[name]
+        self.heap_list[index] = (new_value, name)
+        self.value_map[name] = new_value
 
         self.__up_heapify__(index)

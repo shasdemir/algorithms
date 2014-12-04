@@ -6,15 +6,16 @@ from L5 import *
 
 class NamedTests(unittest.TestCase):
     def test_up_heapify(self):
-        heap = NamedHeap(heap_list=[2, 4, 3, 5, 9, 7, 7], heaped_names=['a'] * 7)
+        heap = NamedHeap(heap_list=zip([2, 4, 3, 5, 9, 7, 7], ['a', 'b', 'c', 'd', 'e', 'f', 'g']))
 
-        heap.heap_list.append(1)
-        heap.heaped_names.append('a')
+        heap.heap_list.append((1, 'h'))
+        heap.value_map['h'] = 1
+        heap.position_map['h'] = len(heap.heap_list) - 1
 
         heap.__up_heapify__(-1)
 
-        assert 1 == heap.heap_list[0]
-        assert 2 == heap.heap_list[1]
+        assert (1, 'h') == heap.heap_list[0]
+        assert (2, 'a') == heap.heap_list[1]
 
     def test_dijkstra(self):
         # shortcuts
@@ -38,7 +39,6 @@ class NamedTests(unittest.TestCase):
             make_link(G, i, j, k)
 
         assert dijkstra(G, a)[d] == 3  # a -> e -> d
-        return
 
     def test__dijkstra_3(self):
         (a, b, c, d) = ('A', 'B', 'C', 'D')
