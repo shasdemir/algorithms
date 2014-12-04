@@ -28,11 +28,10 @@ def dijkstra(G, v):
     final_dist = {}
 
     while len(final_dist) < len(G):  # assuming connected graph
-        w, w_dist = dist_so_far_heap.shortest_dist_node()
+        w_dist, w = dist_so_far_heap.pop_minimum()
 
         # lock it down
         final_dist[w] = w_dist
-        dist_so_far_heap.pop_minimum()
 
         for x in G[w]:
             if x not in final_dist:
@@ -149,7 +148,7 @@ class NamedHeap(object):
         return self.value_map[name]
 
     def get_minimum(self):
-        return self.heap_list[0][1], self.heap_list[0][0]
+        return self.heap_list[0]
 
     def shortest_dist_node(self):
         return self.get_minimum()
