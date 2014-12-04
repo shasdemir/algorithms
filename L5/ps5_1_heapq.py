@@ -43,7 +43,7 @@ def dijkstra(G, v):
 
     while len(final_dist) < len(G):  # assuming connected graph
         w_dist, w = hq.heappop(dist_so_far)
-        del dsf_values_map[w[0]]
+        del dsf_values_map[w]
 
         # lock it down
         final_dist[w] = w_dist
@@ -55,9 +55,9 @@ def dijkstra(G, v):
                     dsf_values_map[x] = final_dist[w] + G[w][x]
 
                 elif final_dist[w] + G[w][x] < dsf_values_map[x]:
-                    for k in dist_so_far:
-                        if k[1] == x:
-                            dist_so_far[k] = (final_dist[w] + G[w][x], x)
+                    for i, item in enumerate(dist_so_far):
+                        if item[1] == x:
+                            dist_so_far[i] = (final_dist[w] + G[w][x], x)
                     hq.heapify(dist_so_far)
                     dsf_values_map[x] = final_dist[w] + G[w][x]
 
