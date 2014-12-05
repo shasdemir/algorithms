@@ -65,33 +65,6 @@ def dijkstra_2k(G, v):  # first attempt using heapq. passes 1k random graph test
     return final_dist
 
 
-def dijkstra(G, v):
-    """ Instead of modifyig the heap, we just add the new entry and keep track. """
-
-    dist_so_far = [(0, v)]
-    dsf_values_map = {v: 0}
-    final_dist = {}
-
-    while len(dist_so_far) > 0:  # assuming connected graph
-        w_dist, w = hq.heappop(dist_so_far)
-
-        if w in final_dist:
-            continue
-
-        # lock it down
-        del dsf_values_map[w]
-        final_dist[w] = w_dist
-
-        for x in G[w]:
-            if x not in final_dist:
-                route_dist = final_dist[w] + G[w][x]
-
-                if x not in dsf_values_map or route_dist < dsf_values_map[x]:
-                    hq.heappush(dist_so_far, (route_dist, x))
-                    dsf_values_map[x] = route_dist
-    return final_dist
-
-
 def dijkstra_lc(G, v):  # second attempt. worse than the first
     dist_so_far = [(0, v)]
     dsf_values_map = {v: 0}
@@ -119,4 +92,31 @@ def dijkstra_lc(G, v):  # second attempt. worse than the first
 
                     hq.heapify(dist_so_far)
                     dsf_values_map[x] = final_dist[w] + G[w][x]
+    return final_dist
+
+
+def dijkstra(G, v):
+    """ Instead of modifyig the heap, we just add the new entry and keep track. """
+
+    dist_so_far = [(0, v)]
+    dsf_values_map = {v: 0}
+    final_dist = {}
+
+    while len(dist_so_far) > 0:  # assuming connected graph
+        w_dist, w = hq.heappop(dist_so_far)
+
+        if w in final_dist:
+            continue
+
+        # lock it down
+        del dsf_values_map[w]
+        final_dist[w] = w_dist
+
+        for x in G[w]:
+            if x not in final_dist:
+                route_dist = final_dist[w] + G[w][x]
+
+                if x not in dsf_values_map or route_dist < dsf_values_map[x]:
+                    hq.heappush(dist_so_far, (route_dist, x))
+                    dsf_values_map[x] = route_dist
     return final_dist
