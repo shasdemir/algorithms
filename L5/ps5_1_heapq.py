@@ -22,7 +22,7 @@ def dijkstra_old(G, v):
     return final_dist
 
 
-def make_link(G, node1, node2, w):
+def make_link(G, node1, node2, w=1):
     if node1 not in G:
         G[node1] = {}
     if node2 not in G[node1]:
@@ -96,7 +96,7 @@ def dijkstra_lc(G, v):  # second attempt. worse than the first
 
 
 def dijkstra(G, v):
-    """ Instead of modifyig the heap, we just add the new entry and keep track. """
+    """ Instead of modifying the heap, we just add the new entry and keep track. """
 
     dist_so_far = [(0, v)]
     dsf_values_map = {v: 0}
@@ -108,8 +108,7 @@ def dijkstra(G, v):
         if w in final_dist:
             continue
 
-        # lock it down
-        del dsf_values_map[w]
+        del dsf_values_map[w]  # lock it down
         final_dist[w] = w_dist
 
         for x in G[w]:
