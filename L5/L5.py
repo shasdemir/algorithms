@@ -173,3 +173,61 @@ class NamedHeap(object):
         self.value_map[name] = new_value
 
         self.__up_heapify__(index)
+
+
+def path(G, v1, v2):
+    open_list = [v1]
+    path_from_start = {v1: [v1]}
+
+    if v1 == v2:
+        return path_from_start[v1]
+
+    while open_list:
+        current = open_list.pop(0)  # bfs
+
+        for neighbor in G[current]:
+            if neighbor not in path_from_start:
+                path_from_start[neighbor] = path_from_start[current] + [neighbor]
+                if neighbor == v2:
+                    return path_from_start[v2]
+                open_list.append(neighbor)
+    return False
+
+
+def bfs_allpaths(G, v):
+    open_list = [v]
+    path_from_start = {v: [v]}
+
+    while open_list:
+        current = open_list.pop(0)  # bfs
+
+        for neighbor in G[current]:
+            if neighbor not in path_from_start:
+                path_from_start[neighbor] = path_from_start[current] + [neighbor]
+                open_list.append(neighbor)
+    return path_from_start
+
+
+def dijkstra_path(G, v):
+    dist_path_so_far = [(0, v, [v])]
+    dsf_values_map = {v: 0}
+    final_dist_path = {}
+
+    while len(dist_path_so_far) > 0:  # assuming connected graph
+        w_dist, w, w_path = hq.heappop(dist_path_so_far)
+
+        if w in final_dist_path:
+            continue
+
+        del dsf_values_map[w]  # lock it down
+        final_dist_path[w] = (w_dist, w_path)
+
+        for x in G[w]:
+            if x not in final_dist_path:
+                route_dist = final_dist_path[w][0] + G[w][x]
+                route_path = final_dist_path[w][1] + [x]
+
+                if x not in dsf_values_map or route_dist < dsf_values_map[x]:
+                    hq.heappush(dist_path_so_far, (route_dist, x, route_path))
+                    dsf_values_map[x] = route_dist
+    return final_dist_path
