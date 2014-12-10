@@ -208,7 +208,7 @@ def bfs_allpaths(G, v):
     return path_from_start
 
 
-def dijkstra_path(G, v):
+def dijkstra_paths(G, v):
     dist_path_so_far = [(0, v, [v])]
     dsf_values_map = {v: 0}
     final_dist_path = {}
@@ -230,4 +230,8 @@ def dijkstra_path(G, v):
                 if x not in dsf_values_map or route_dist < dsf_values_map[x]:
                     hq.heappush(dist_path_so_far, (route_dist, x, route_path))
                     dsf_values_map[x] = route_dist
+
+    # erase distances from final_dist_path
+    for hero in final_dist_path:
+        final_dist_path[hero] = final_dist_path[hero][1]
     return final_dist_path
