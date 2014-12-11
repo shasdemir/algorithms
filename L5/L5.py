@@ -235,3 +235,29 @@ def dijkstra_paths(G, v):
     for hero in final_dist_path:
         final_dist_path[hero] = final_dist_path[hero][1]
     return final_dist_path
+
+
+def dijkstra_obscure_paths(G, v):
+    dist_path_so_far = [(0, v, [v])]
+    dsf_values_map = {v: 0}
+    final_dist_path = {}
+
+    while len(dist_path_so_far) > 0:  # assuming connected graph
+        w_dist, w, w_path = hq.heappop(dist_path_so_far)
+
+        if w in final_dist_path:
+            continue
+
+        del dsf_values_map[w]  # lock it down
+        final_dist_path[w] = (w_dist, w_path)
+
+        for x in G[w]:
+            if x not in final_dist_path:
+                route_dist = max(final_dist_path[w][0], G[w][x])
+                route_path = final_dist_path[w][1] + [x]
+
+                if x not in dsf_values_map or route_dist < dsf_values_map[x]:
+                    hq.heappush(dist_path_so_far, (route_dist, x, route_path))
+                    dsf_values_map[x] = route_dist
+
+    return final_dist_path
