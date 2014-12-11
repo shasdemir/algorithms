@@ -25,9 +25,6 @@ def importance_rank(items, weights):
 
 answer = importance_rank(animals, (2, 3, 7, 1))
 
-# for i in range(len(answer)):
-#     print i, answer[i][1], "(", answer[i][0], ")"
-
 
 def mean(L):
     return sum(L) / float(len(L))
@@ -109,7 +106,6 @@ def build_heap(L):
 def remove_min(L):
     L[0] = L.pop()  # move last element to the beginning
     down_heapify(L, 0)
-
     return L
 
 
