@@ -9,7 +9,7 @@ def long_and_simple_path(G,u,v,l):
         return False
     # Otherwise, build and return the path
 
-    if u in G[v]:
+    if l == 2 and u in G[v]:
         return [u, v]
 
     reachable_neighbors = [nbor for nbor in G[v] if long_and_simple_decision(G, u, nbor, l-1)]
@@ -18,7 +18,7 @@ def long_and_simple_path(G,u,v,l):
     else:
         return False
 
-    return long_and_simple_path(G, u, one_nbor, l-1).append(v)
+    return long_and_simple_path(G, u, one_nbor, l-1) + [v]
 
 
 def make_link(G, node1, node2):
