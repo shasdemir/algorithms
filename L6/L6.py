@@ -5,20 +5,26 @@ def long_and_simple_path(G,u,v,l):
     v: ending node
     l: minimum length of path
     """
+
     if not long_and_simple_decision(G,u,v,l):
         return False
     # Otherwise, build and return the path
 
-    if l == 2 and u in G[v]:
+    if l <= 2 and u in G[v]:
         return [u, v]
 
     reachable_neighbors = [nbor for nbor in G[v] if long_and_simple_decision(G, u, nbor, l-1)]
-    if reachable_neighbors:
-        one_nbor = reachable_neighbors[0]
-    else:
+
+    if not reachable_neighbors:
         return False
 
-    return long_and_simple_path(G, u, one_nbor, l-1) + [v]
+    paths_to_neighbors = [(r_nbor, long_and_simple_path(G, u, r_nbor, l-1)) for r_nbor in reachable_neighbors]
+
+    noncyclic_paths = [(nbor, path) for nbor, path in paths_to_neighbors if v not in path]
+
+    one_noncyclic_path = noncyclic_paths[0][1]
+
+    return one_noncyclic_path + [v]
 
 
 def make_link(G, node1, node2):
@@ -51,13 +57,15 @@ def check_path(G,path):
 
 def long_and_simple_decision(G,u,v,l):
     if l == 0:
-        return False
+        return long_and_simple_decision(G, u, v, 1)
     n = len(G)
     perms = all_perms(G.keys())
     for perm in perms:
+        if not perm:
+            continue
         # check path
         if (len(perm) >= l and check_path(G,perm) and perm[0] == u
-            and perm[len(perm)-1] == v):
+            and perm[-1] == v):
             return True
     return False
 
