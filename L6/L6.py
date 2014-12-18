@@ -91,3 +91,13 @@ def long_and_simple_decision(G,u,v,l):
 flights = [(1,2),(1,3),(2,3),(2,6),(2,4),(2,5),(3,6),(4,5)]
 G = {}
 for (x, y) in flights: make_link(G, x, y)
+
+
+# if cert a k-coloring of G?
+#   colors in {0, ..., k-1}
+def verify(G, cert, k):
+    for node in G:
+        for nbor in G[node]:
+            if cert[nbor] == cert[node] or cert[nbor] >= k:
+                return False
+    return True
