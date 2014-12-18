@@ -1,4 +1,4 @@
-def long_and_simple_path(G,u,v,l):
+def long_and_simple_path_try(G,u,v,l):
     """
     G: Graph
     u: starting node
@@ -25,6 +25,24 @@ def long_and_simple_path(G,u,v,l):
     one_noncyclic_path = noncyclic_paths[0][1]
 
     return one_noncyclic_path + [v]
+
+
+def long_and_simple_path(G,u,v,l):  # just try all permutations :p
+    if not long_and_simple_decision(G,u,v,l):
+        return False
+
+    no_cycles = lambda path: len(path) == len(set(path))
+
+    n = len(G)
+    perms = all_perms(G.keys())
+    for perm in perms:
+        if not perm:
+            continue
+        # check path
+        if (len(perm) == l and check_path(G,perm) and perm[0] == u
+            and perm[-1] == v and no_cycles(perm)):
+            return perm
+    return False
 
 
 def make_link(G, node1, node2):
