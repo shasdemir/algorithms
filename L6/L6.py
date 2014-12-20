@@ -101,3 +101,30 @@ def verify(G, cert, k):
             if cert[nbor] == cert[node] or cert[nbor] >= k:
                 return False
     return True
+
+
+def invert(H):
+    """ Invert graph. """
+
+    # strategy: create a full graph, except where links are in H
+    H_inv = {}
+
+    for node1 in H:
+        for node2 in H:
+            if node2 != node1 and node2 not in H[node1]:
+                make_link(H_inv, node1, node2)
+
+    # add unconnected nodes
+    for node in H:
+        if node not in H_inv:
+            H_inv[node] = {}
+
+    return H_inv
+
+
+# This function should use the k_clique_decision function
+# to solve the independent set decision problem
+def independent_set_decision(H, s):
+    H_inv = invert(H)
+
+    return k_clique_decision(H_inv, s)
