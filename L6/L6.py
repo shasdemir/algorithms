@@ -128,3 +128,37 @@ def independent_set_decision(H, s):
     H_inv = invert(H)
 
     return k_clique_decision(H_inv, s)
+
+
+def remove_node(G, node):
+    """ Return a new graph with :node removed from G. """
+
+    import copy
+
+    G_minus = copy.deepcopy(G)
+    for nbor in G[node]:
+        break_link(G_minus, node, nbor)
+
+    return G_minus
+
+
+def k_clique(G, k):
+    if not k_clique_decision(G, k):
+        return False
+
+    import copy
+    result = copy.deepcopy(G)
+
+    for node in G:
+        G_minus = remove_node(result, node)
+
+        if k_clique_decision(G_minus, k):
+            result = G_minus
+
+    # if there is more than a single node in result, remove unconnected nodes
+    node_list = result.keys()
+    if len(node_list) > 1:
+        for node in node_list:
+            if result[node] == {}:
+                del result[node]
+    return result.keys()
